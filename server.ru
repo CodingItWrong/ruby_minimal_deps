@@ -1,10 +1,11 @@
 require 'rack'
 require 'pg'
+require_relative 'src/message_repository'
 
-conn = PG.connect(dbname: 'ruby_minimal_deps_development')
+messages = MessageRepository.new
 
 hello = ->(env) {
-  result = conn.exec('SELECT message FROM messages LIMIT 1')
+  result = messages.first_message
   message = result[0]['message']
   [200, {'Content-Type' => 'text/plain'}, [message]]
 }
